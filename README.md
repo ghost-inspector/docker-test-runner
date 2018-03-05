@@ -20,8 +20,9 @@ The base image test runner is designed for you to extend with your source
 files for the purpose of testing your application. An example of using this
 method can be found in the [README](./test-runner-node).
 
-[Dockerfile available here](./test-runner-node/Dockerfile)
-[Image on Docker Hub](https://hub.docker.com/r/ghostinspector/test-runner-node/)
+[Dockerfile available here](./test-runner-node/Dockerfile).
+
+[View image on Docker Hub](https://hub.docker.com/r/ghostinspector/test-runner-node/).
 
 
 Standalone (advanced)
@@ -35,17 +36,18 @@ environment where it is not possible (or desireable) to change the base
 configuration of your container through the use of [Docker container networking](https://docs.docker.com/v17.09/engine/userguide/networking/). More details can
 be found in the [README](./test-runner-standalone).
 
-[Dockerfile available here](./test-runner-standalone/Dockerfile)
-[Image on Docker Hub](https://hub.docker.com/r/ghostinspector/test-runner-standalone/)
+[Dockerfile available here](./test-runner-standalone/Dockerfile).
+
+[View image on Docker Hub](https://hub.docker.com/r/ghostinspector/test-runner-standalone/).
 
 Development
 ===========
-Run `build.sh` to create Docker containers for the available configurations.
+Run `build.sh` to create Docker images for the available configurations.
 
 Support
 =======
-Please open issues in Github or send questions to [Ghost Inspector support](https://ghostinspector.com/support/)
+Please open issues in Github or send questions to [Ghost Inspector support](https://ghostinspector.com/support/).
 
 Changelog
 =========
- * 2018-03-05 - initial version
+ * 2018-03-05 - initial version.

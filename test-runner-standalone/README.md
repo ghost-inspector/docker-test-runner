@@ -1,11 +1,11 @@
 Ghost Inspector test runner Docker images
 -----------------------------------------
-[Ghost Inspector](https://ghostinspector.com/) is an automated website testing
+[Ghost Inspector](https://ghostinspector.com/docs/getting-started/) is an automated website testing
 and monitoring service that checks for problems with your website or
 application. It carries out operations in a browser, the same way a user would,
 to ensure that everything is working properly.
 
-This Docker image will allow you to execute your Ghost Inspector test suite
+This Docker image will allow you to execute your [Ghost Inspector test suite](https://ghostinspector.com/docs/getting-started/)
 against another running Docker container within your cluster.
 
 There is also single-container Docker image available
@@ -68,6 +68,32 @@ before:
  * execute the Ghost Inspector test suite based on `GI_SUITE`
  * poll the Ghost Inspector API for `passing` status until a result is provided
  * exit with the pass (`0`) or fail (`1`) status
+
+LICENSE
+=======
+```
+The MIT License
+
+Copyright (c) Ghost Inspector, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+```
 
 Support
 =======
