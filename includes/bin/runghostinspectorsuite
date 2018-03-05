@@ -15,7 +15,7 @@ echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
 
 
-SERVER="$1"
+SERVER="${@:2}"
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
   node $SERVER &
@@ -35,7 +35,7 @@ sleep 5
 START_URL=$(curl -s 'http://localhost:4040/api/tunnels' | jq -r '.tunnels[1].public_url')
 if [ "$START_URL" = "" ]; then
   echo "ERROR: did not get a start URL from the ngrok daemon, exiting..."
-  exit 1
+  exit 1g
 fi
 echo "Using start URL: $START_URL"
 
