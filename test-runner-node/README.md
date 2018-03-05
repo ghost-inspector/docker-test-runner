@@ -64,7 +64,7 @@ The last line of your `Dockerfile` should be `ENTRYPOINT`, which should look
 something like this:
 
 ```
-ENTRYPOINT ["/bin/runghostinspectorsuite", "index.js"]
+ENTRYPOINT ["/bin/runghostinspectorsuite", "index.js", "--foo=bar"]
 ```
 
 ...where `index.js` is the entrypoint for your application. Under the hood, our
@@ -76,6 +76,7 @@ following:
  * execute the Ghost Inspector test suite based on `GI_SUITE`
  * poll the Ghost Inspector API for `passing` status until a result is provided
  * exit with the pass (`0`) or fail (`1`) status
+
 
 LICENSE
 =======
@@ -105,4 +106,4 @@ THE SOFTWARE.
 
 Support
 =======
-Please open [issues in Github]() or send questions to [Ghost Inspector support](https://ghostinspector.com/support/)
+Please open [issues in Github](https://github.com/ghost-inspector/docker-test-runner/issues) or send questions to [Ghost Inspector support](https://ghostinspector.com/support/)
