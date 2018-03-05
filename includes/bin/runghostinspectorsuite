@@ -6,14 +6,18 @@ set -e
 : "${GI_API_KEY:?GI_API_KEY env var is required}"
 : "${APP_PORT:?APP_PORT env var is required}"
 
-echo "NGROK_TOKEN: $NGROK_TOKEN"
+PRINT_NGROK_TOKEN="$(echo $NGROK_TOKEN | head -c4)****************"
+PRINT_GI_API_KEY="$(echo $GI_API_KEY | head -c4)****************"
+
+echo "NGROK_TOKEN: $PRINT_NGROK_TOKEN"
+echo "GI_API_KEY: $PRINT_GI_API_KEY"
 echo "GI_SUITE: $GI_SUITE"
-echo "GI_API_KEY: $GI_API_KEY"
 echo "APP_PORT: $APP_PORT"
+
 
 SERVER="$1"
 # check if we need to start the application
-if [ "$SERVER" -ne '' ]; then
+if [ "$SERVER" != "" ]; then
   node $SERVER &
   APP_PID=$!
   echo "Local application started with PID: $APP_PID"
@@ -37,9 +41,9 @@ SUITE_RESULT=
 PASSING=
 
 # Execute Ghost Inspector suite via API and grab the result ID
-EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?apiKey=$GI_API_KEY&startUrl=$START_URL&immediate=1"
-echo "Executing suite: $EXECUTE_URL"
-RESULT_ID=$(curl -s $EXECUTE_URL | jq -r '.data._id')
+EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1"
+echo "Executing suite: $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
+RESULT_ID=$(curl -s "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
 
 # for the suite result, sleep for a few seconds if it hasn't changed
 echo "Polling for suite results (ID: $RESULT_ID)"
@@ -47,7 +51,11 @@ while [ "$STATUS" = 'null' ]; do
   sleep 5
   SUITE_RESULT=$(curl -s "https://api.ghostinspector.com/v1/suite-results/$RESULT_ID/?apiKey=$GI_API_KEY")
   STATUS=$(echo $SUITE_RESULT | jq -r '.data.passing')
-  echo " - status: $STATUS"
+  if [ "$STATUS" = 'null' ]; then
+    echo " - status: running..."
+  else
+    echo " - status: done, passing: $STATUS"
+  fi
 done
 
 # status has been updated, check results for "passing"
@@ -60,7 +68,7 @@ else
 fi
 
 # clean up our processes
-if [ "$SERVER" -ne '' ]; then
+if [ "$SERVER" != "" ]; then
   kill -9 $APP_PID
 fi
 kill -9 $NGROK_PID
