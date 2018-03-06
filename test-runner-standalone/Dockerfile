@@ -1,6 +1,9 @@
 FROM ubuntu:16.04
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
+RUN apt-get update \
+ && apt-get install -y curl
+
 # Install unzip
 ADD https://oss.oracle.com/el4/unzip/unzip.tar /unzip.tar
 RUN tar -xf /unzip.tar \
