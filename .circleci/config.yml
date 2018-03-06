@@ -16,11 +16,13 @@ jobs:
           name: Test new image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker run ghostinspector/test-runner-node:$TAG test-app/index.js --myCliVar=my-cli-var
-          environment:
-            - APP_PORT: 8000
-            - GI_SUITE: 5a9ebeab9d311c32b43f3f5d
-            - MY_ENV_VAR: my-env-var
+            docker run \
+              -e NGROK_TOKEN=$NGROK_TOKEN \
+              -e GI_API_KEY=$GI_API_KEY \
+              -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
+              -e APP_PORT=8000 \
+              -e MY_ENV_VAR=my-env-var \
+              ghostinspector/test-runner-node:$TAG test-app/index.js --myCliVar=my-cli-var
 workflows:
   version: 2
   test_base_image:
