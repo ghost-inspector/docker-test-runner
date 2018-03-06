@@ -1,11 +1,17 @@
 FROM ubuntu:16.04
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
+# Install unzip
+ADD https://oss.oracle.com/el4/unzip/unzip.tar /unzip.tar
+RUN tar -xf /unzip.tar \
+  && rm -f /unzip.tar
+
 # Install ngrok (latest official stable from https://ngrok.com/download).
 ADD https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip /ngrok.zip
 RUN set -x \
- && unzip -o /ngrok.zip -d /bin \
- && rm -f /ngrok.zip
+ && /unzip -o /ngrok.zip -d /bin \
+ && rm -f /ngrok.zip \
+ && rm /unzip
 
 # Add ngrok config.
 COPY ./includes/ngrok.yml /home/ngrok/.ngrok2/
