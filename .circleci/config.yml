@@ -15,6 +15,7 @@ jobs:
       - run:
           name: Test new image
           command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
             docker run ghostinspector/test-runner-node:$TAG test-app/index.js --myCliVar=my-cli-var
           environment:
             - APP_PORT: 8000
