@@ -15,7 +15,7 @@ echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
 
 
-SERVER="${@:2}"
+SERVER="${@:1}"
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
   echo "Running application with args: $SERVER"
