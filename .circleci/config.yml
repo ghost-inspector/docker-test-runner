@@ -12,23 +12,8 @@ jobs:
             cp -R ./includes/ ./test-runner-node/includes
             docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
 
-  test:
-    docker:
-      - image: ghostinspector/test-runner-node:$TAG
-    steps:
-      - checkout
-      - run:
-          name: Run Suite
-          command: |
-            /bin/runghostinspectorsuite test-app/index.js --myCliVar=my-cli-var
-          environment:
-            - APP_PORT: 8000
-            - GI_SUITE: 5a9ebeab9d311c32b43f3f5d
-            - MY_ENV_VAR: my-env-var
-
 workflows:
   version: 2
   test_base_image:
     jobs:
       - build
-      - test
