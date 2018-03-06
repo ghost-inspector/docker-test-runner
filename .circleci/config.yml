@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build-and-test:
+  build:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -12,19 +12,22 @@ jobs:
             TAG=0.1.$CIRCLE_BUILD_NUM
             cp -R ./includes/ ./test-runner-node/includes
             docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
+  test:
+    docker:
+      - image: ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
+    steps:
+      - checkout
       - run:
-          name: Test new image
+          name: Run Suite
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
-            docker run \
-              -e NGROK_TOKEN=$NGROK_TOKEN \
-              -e GI_API_KEY=$GI_API_KEY \
-              -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
-              -e APP_PORT=8000 \
-              -e MY_ENV_VAR=my-env-var \
-              ghostinspector/test-runner-node:$TAG test-app/index.js --myCliVar=my-cli-var
+            /bin/runghostinspectorsuite test-app/index.js --myCliVar=my-cli-var
+          environment:
+            - APP_PORT: 8000
+            - GI_SUITE: 5a9ebeab9d311c32b43f3f5d
+            - MY_ENV_VAR: my-env-var
 workflows:
   version: 2
   test_base_image:
     jobs:
-      - build-and-test
+      - build
+      - test
