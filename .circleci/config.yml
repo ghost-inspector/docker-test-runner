@@ -5,10 +5,12 @@ jobs:
       - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker
-      - run: |
-        TAG=0.1.$CIRCLE_BUILD_NUM
-        cp -R ./includes/ ./test-runner-node/includes
-        docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
+      - run:
+        name: Build test-runner-node:$TAG
+        command: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          cp -R ./includes/ ./test-runner-node/includes
+          docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
 
   execute-suite:
     docker:
