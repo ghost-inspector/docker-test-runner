@@ -52,6 +52,7 @@ $ docker run \
   -e NGROK_TOKEN=<my-ngrok-token> \
   -e GI_API_KEY=<my-api-key> \
   -e GI_SUITE=<my-suite-id> \
+  -e GI_PARAM_myVar=foo \
   -e APP_PORT=my-app:8000 \
   --network test-network \
   ghostinspector/test-runner-standalone
@@ -62,7 +63,11 @@ values for `NGROK_TOKEN`, `GI_API_KEY`, and `GI_SUITE`. Notice that for
 `APP_PORT` we've passed in `my-app:8000`, `my-app` will resolve to our running
 docker container that we named `my-app` and `8000` assumes that is the port
 that our application is running on. Finally we also connect this new container
-to the same `test-network` so all the DNS and networking magic can happen. 
+to the same `test-network` so all the DNS and networking magic can happen. Also
+note that you can send custom variables to the API call when we execute your
+test suite by using a custom environment variable named `GI_PARAM_varName`
+where `varName` is the name of your variable. This will be available in your
+Ghost Inspector tests under `{{varName}}` at runtime.
 
 Once this container fires up, it will perform the exact same set of actions as
 before:

@@ -27,10 +27,11 @@ COPY . .
 # Install your app
 RUN npm install .
 
-ENV NGROK_TOKEN <your-ngrok-token>
+ENV APP_PORT 3000
 ENV GI_API_KEY <ghostinspector-api-key>
 ENV GI_SUITE <ghostinspector-suite-id>
-ENV APP_PORT 3000
+ENV GI_PARAM_myVar some-custom-value
+ENV NGROK_TOKEN <your-ngrok-token>
 
 # Pass your application entrypoint into our test runner script
 ENTRYPOINT ["/bin/runghostinspectorsuite", "index.js"]
@@ -57,10 +58,11 @@ As well as adding any dependencies or additional requirements for your
 application, the following environment variables are required for the test
 runner:
 
- * `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
+ * `APP_PORT` - the port your local application will run on (eg: `3000`)
  * `GI_API_KEY` - available in your [Ghost Inspector account](https://app.ghostinspector.com/account)
  * `GI_SUITE` - the ID of the Ghost Inspector test suite you wish to run
- * `APP_PORT` - the port your local application will run on (eg: `3000`)
+ * `GI_PARAM_myVar` - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
+ * `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
 
 ### Entry point
 The last line of your `Dockerfile` should be `ENTRYPOINT`, which should look

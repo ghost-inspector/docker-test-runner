@@ -14,6 +14,16 @@ echo "GI_API_KEY: $PRINT_GI_API_KEY"
 echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
 
+# check for additional URL parameters in the environment
+GI_ENV_PARAMS=$(env | grep "^GI_PARAM_.*")
+GI_EXTRA_PARAMS=''
+
+# parse the extra URL parameters into usable format
+for param in $GI_ENV_PARAMS; do
+  GI_PARAM=$(echo $param | sed 's/GI_PARAM_//g')
+  echo "Extra API parameter: $GI_PARAM"
+  GI_EXTRA_PARAMS="&$GI_PARAM$GI_EXTRA_PARAMS"
+done
 
 SERVER="${@:1}"
 # check if we need to start the application
@@ -46,7 +56,7 @@ SUITE_RESULT=
 PASSING=
 
 # Execute Ghost Inspector suite via API and grab the result ID
-EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1"
+EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1$GI_EXTRA_PARAMS"
 echo "Executing suite: $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
 RESULT_ID=$(curl -s "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
 
