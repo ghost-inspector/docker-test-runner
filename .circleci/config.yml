@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  execute-suite:
+    docker:
+      - image: ghostinspector/test-runner-node
+    steps:
+      - checkout
+      - run:
+          name: Run Suite
+          command: |
+            /bin/runghostinspectorsuite test-app/index.js --myVar=cli-var
+
+workflows:
+  version: 2
+  test_base_image:
+    jobs:
+      - execute-suite
