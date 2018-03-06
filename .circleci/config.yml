@@ -57,7 +57,7 @@ jobs:
             docker network create temp-network
             docker run -d \
               --network temp-network \
-              --name standalone-app
+              --name standalone-app \
               standalone-app --sha=$CIRCLE_SHA1
             docker run \
               --network temp-network \
