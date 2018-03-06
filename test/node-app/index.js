@@ -9,6 +9,7 @@ http.createServer(function (req, res) {
   res.end(`
 <html>
   <body>
+    <h2>Base image test</h2>
     <ul>
       <li id="envVar">${process.env.MY_ENV_VAR}</li>
       <li id="cliVar">${process.argv.pop()}</li>

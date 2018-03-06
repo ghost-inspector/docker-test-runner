@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build-and-test-base-image:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -13,9 +13,9 @@ jobs:
             IMAGE_ID=$(docker build -q -t ghostinspector/test-runner-node ./test-runner-node)
             docker tag $IMAGE_ID ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
       - run:
-          name: Build test-app image
+          name: Build node-app image
           command: |
-            docker build -t test-app:0.1.$CIRCLE_BUILD_NUM ./test-app
+            docker build -t node-app:0.1.$CIRCLE_BUILD_NUM ./test/node-app
       - run:
           name: Execute test
           command: |
@@ -25,7 +25,7 @@ jobs:
               -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
               -e APP_PORT=8000 \
               -e MY_ENV_VAR=my-env-var \
-              test-app:0.1.$CIRCLE_BUILD_NUM
+              node-app:0.1.$CIRCLE_BUILD_NUM
       - run:
           name: Push new ghostinspector/test-runner-node image to Docker Hub
           command: |
@@ -36,4 +36,4 @@ workflows:
   version: 2
   test_base_image:
     jobs:
-      - build
+      - build-and-test-base-image
