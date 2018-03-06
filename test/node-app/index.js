@@ -26,8 +26,8 @@ http.createServer(function (req, res) {
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
       <li id="sha">${process.argv[3]}</li>
 
-      <!-- buildNumber is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
-      <li id="buildNumber">${process.argv[4]}</li>
+      <!-- buil is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
+      <li id="build">${process.argv[4]}</li>
     </ul>
   </body>
 </html>
