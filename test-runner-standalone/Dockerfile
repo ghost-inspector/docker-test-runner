@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM ubuntu:16.04
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
 # Install ngrok (latest official stable from https://ngrok.com/download).
@@ -21,4 +21,4 @@ COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 EXPOSE 4040
 
 # The primary script.
-ENTRYPOINT ["/bin/runghostinspectorsuite"]
+ENTRYPOINT ["/bin/qrunghostinspectorsuite"]
