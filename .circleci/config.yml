@@ -7,10 +7,11 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: Build test-runner-node
+          name: Build ghostinspector/test-runner-node
           command: |
             cp -R ./includes/ ./test-runner-node/includes
-            docker build -t ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM ./test-runner-node
+            IMAGE_ID=$(docker build -q -t ghostinspector/test-runner-node ./test-runner-node)
+            docker tag $IMAGE_ID ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
       - run:
           name: Build test-app image
           command: |
