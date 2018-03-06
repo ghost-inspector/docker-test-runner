@@ -18,6 +18,7 @@ echo "APP_PORT: $APP_PORT"
 SERVER="${@:2}"
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
+  echo "Running application with args: $SERVER"
   node $SERVER &
   APP_PID=$!
   echo "Local application started with PID: $APP_PID"
