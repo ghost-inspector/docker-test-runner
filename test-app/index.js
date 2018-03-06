@@ -11,7 +11,7 @@ http.createServer(function (req, res) {
   <body>
     <ul>
       <li id="envVar">${process.env.MY_ENV_VAR}</li>
-      <li id="paramVar">${process.argv.pop()}</li>
+      <li id="cliVar">${process.argv.pop()}</li>
     </ul>
   </body>
 </html>
