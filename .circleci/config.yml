@@ -31,6 +31,7 @@ jobs:
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
+            docker push ghostinspector/test-runner-node:latest
 workflows:
   version: 2
   test_base_image:
