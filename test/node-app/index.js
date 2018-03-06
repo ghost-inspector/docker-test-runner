@@ -10,9 +10,16 @@ http.createServer(function (req, res) {
 <html>
   <body>
     <h2>Base image test</h2>
+    <p>
+      This application is run inside a docker container using a base image of
+      <code>ghostinspector/test-runner-node</code>. The following
+      environment/cli variables are exposed as a part of the test and verified
+      at build time using Ghost Inspector:
+    </p>
     <ul>
       <li id="envVar">${process.env.MY_ENV_VAR}</li>
-      <li id="cliVar">${process.argv.pop()}</li>
+      <li id="cliVar">${process.argv[2]}</li>
+      <li id="sha">${process.argv[3]}</li>
     </ul>
   </body>
 </html>
