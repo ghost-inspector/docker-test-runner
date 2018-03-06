@@ -1,18 +1,18 @@
 version: 2
 jobs:
-  build-image:
+  build:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker
       - run:
-        name: Build test-runner-node:$TAG
-        command: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          cp -R ./includes/ ./test-runner-node/includes
-          docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
+          name: Build test-runner-node:$TAG
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            cp -R ./includes/ ./test-runner-node/includes
+            docker build -t ghostinspector/test-runner-node:$TAG ./test-runner-node
 
-  execute-suite:
+  test:
     docker:
       - image: ghostinspector/test-runner-node:$TAG
     steps:
@@ -30,5 +30,5 @@ workflows:
   version: 2
   test_base_image:
     jobs:
-      - build-image
-      - execute-suite
+      - build
+      - test
