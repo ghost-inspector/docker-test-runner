@@ -27,4 +27,4 @@ COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 EXPOSE 4040
 
 # The primary script.
-ENTRYPOINT ["/bin/qrunghostinspectorsuite"]
+ENTRYPOINT ["/bin/runghostinspectorsuite"]
