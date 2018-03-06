@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 : "${NGROK_TOKEN:?NGROK_TOKEN env var is required}"

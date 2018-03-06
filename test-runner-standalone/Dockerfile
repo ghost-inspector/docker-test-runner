@@ -1,4 +1,4 @@
-FROM busybox:ubuntu-14.04
+FROM alpine:latest
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
 # Install ngrok (latest official stable from https://ngrok.com/download).
