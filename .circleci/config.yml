@@ -5,6 +5,7 @@ jobs:
       - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker
+      - checkout
       - run:
           name: Build test-runner-node:$TAG
           command: |
