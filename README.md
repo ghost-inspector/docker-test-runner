@@ -46,7 +46,7 @@ be found in the [README](./test-runner-standalone).
 
 Development
 ===========
-Run `build.sh` to create Docker images for the available configurations.
+Changes pushed to Github will automatically be built (and published) by our CI system.
 
 Support
 =======

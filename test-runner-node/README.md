@@ -61,8 +61,9 @@ runner:
  * `APP_PORT` - the port your local application will run on (eg: `3000`)
  * `GI_API_KEY` - available in your [Ghost Inspector account](https://app.ghostinspector.com/account)
  * `GI_SUITE` - the ID of the Ghost Inspector test suite you wish to run
- * `GI_PARAM_myVar` - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
  * `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
+ * `STARTUP_DELAY` (optional) - seconds to wait for application and ngrok each to start up, defaults to 3 seconds
+ * `GI_PARAM_myVar` (optional) - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
 
 ### Entry point
 The last line of your `Dockerfile` should be `ENTRYPOINT`, which should look

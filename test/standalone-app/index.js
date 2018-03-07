@@ -1,7 +1,3 @@
-/**
- * Just a simple app to test the standalone Dockerfile to ensure that the
- * environment variables and param passing are working.
- */
 var http = require('http'); 
 
 http.createServer(function (req, res) { 

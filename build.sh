@@ -9,7 +9,7 @@ for img in standalone; do
   echo "Building ghostinspector/test-runner-$img..."
   # docker cannot see outside of it's current context, copy dependencies temporarily
   cp -R $DIR/includes/ $DIR/test-runner-$img/includes
-  cd $DIR/test-runner-$img && docker build -t ghostinspector/test-runner-$img . --no-cache
+  cd $DIR/test-runner-$img && docker build -t ghostinspector/test-runner-$img .
   rm -R $DIR/test-runner-$img/includes
   PUSH=$'  $ docker push ghostinspector/test-runner-'$img'\n'$PUSH
   echo "Done."

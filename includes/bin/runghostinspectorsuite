@@ -5,7 +5,9 @@ set -e
 : "${GI_SUITE:?GI_SUITE env var is required}"
 : "${GI_API_KEY:?GI_API_KEY env var is required}"
 : "${APP_PORT:?APP_PORT env var is required}"
+: ${STARTUP_DELAY:=3}
 
+# obscure sensitive tokens from output
 PRINT_NGROK_TOKEN="$(echo $NGROK_TOKEN | head -c4)****************"
 PRINT_GI_API_KEY="$(echo $GI_API_KEY | head -c4)****************"
 
@@ -15,7 +17,9 @@ echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
 
 # check for additional URL parameters in the environment
+set +e
 GI_ENV_PARAMS=$(env | grep "^GI_PARAM_.*")
+set -e
 GI_EXTRA_PARAMS=''
 
 # parse the extra URL parameters into usable format
@@ -25,22 +29,42 @@ for param in $GI_ENV_PARAMS; do
   GI_EXTRA_PARAMS="&$GI_PARAM$GI_EXTRA_PARAMS"
 done
 
+# server command will be all script params after $0
 SERVER="${@:1}"
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
   echo "Running application with args: $SERVER"
   node $SERVER &
   APP_PID=$!
-  echo "Local application started with PID: $APP_PID"
+  echo "Application started with PID: $APP_PID"
+
+  # give the application a second to warm up
+  echo "Waiting $STARTUP_DELAY seconds for application to start..."
+  sleep $STARTUP_DELAY
+
+  # double-check the app is running before we continue
+  if ! kill -0 $APP_PID > /dev/null 2>&1; then
+      echo "FATAL: Unable to signal application process ($SERVER), is it running?" >&2
+      echo "Exiting..."
+      exit 1
+  fi
 fi
 
 # Intialize ngrok and open tunnel to our application
 ngrok authtoken $NGROK_TOKEN
-ngrok http $APP_PORT > /dev/null &
+ngrok http $APP_PORT &
 NGROK_PID=$!
 
 # give ngrok a second to register URLs
-sleep 5
+echo "Waiting $STARTUP_DELAY seconds for ngrok to register..."
+sleep $STARTUP_DELAY
+
+# double-check the ngrok is running before we continue
+if ! kill -0 $NGROK_PID > /dev/null 2>&1; then
+    echo "FATAL: Unable to signal ngrok process, is the token valid?" >&2
+    echo "Exiting..."
+    exit 1
+fi
 
 # Grab the ngrok url to send to the API
 START_URL=$(curl -s 'http://localhost:4040/api/tunnels' | jq -r '.tunnels[1].public_url')

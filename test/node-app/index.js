@@ -1,7 +1,3 @@
-/**
- * Just a simple app to test the base-image Dockerfile to ensure that the
- * environment variables and param passing are working.
- */
 var http = require('http'); 
 
 http.createServer(function (req, res) { 
@@ -26,7 +22,7 @@ http.createServer(function (req, res) {
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
       <li id="sha">${process.argv[3]}</li>
 
-      <!-- buil is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
+      <!-- build is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
       <li id="build">${process.argv[4]}</li>
     </ul>
   </body>

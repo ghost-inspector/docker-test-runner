@@ -31,9 +31,14 @@ jobs:
       - run:
           name: Push new ghostinspector/test-runner-node image to Docker Hub
           command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
-            docker push ghostinspector/test-runner-node:latest
+            if [ $CIRCLE_BRANCH = 'master' ]; then
+              echo "Pushing new image to Docker Hub"
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
+              docker push ghostinspector/test-runner-node:latest
+            else
+              echo "On branch $CIRCLE_BRANCH, nothing else to do."
+            fi
 
   build-and-test-standalone-image:
     docker:
@@ -70,12 +75,17 @@ jobs:
       - run:
           name: Push new ghostinspector/test-runner-standalone image to Docker Hub
           command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
-            docker push ghostinspector/test-runner-standalone:latest
+            if [ $CIRCLE_BRANCH = 'master' ]; then
+              echo "Pushing new image to Docker Hub"
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
+              docker push ghostinspector/test-runner-standalone:latest
+            else
+              echo "On branch $CIRCLE_BRANCH, nothing else to do."
+            fi
 workflows:
   version: 2
-  test_base_image:
+  test:
     jobs:
       - build-and-test-base-image
       - build-and-test-standalone-image
