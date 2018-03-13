@@ -4,7 +4,7 @@ set -e
 DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 PUSH=""
 
-for img in standalone; do
+for img in node standalone; do
   echo ""
   echo "Building ghostinspector/test-runner-$img..."
   # docker cannot see outside of it's current context, copy dependencies temporarily
