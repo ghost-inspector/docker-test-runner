@@ -1,0 +1,91 @@
+version: 2
+jobs:
+  build-and-test-base-image:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Build ghostinspector/test-runner-node
+          command: |
+            cp -R ./includes/ ./test-runner-node/includes
+            IMAGE_ID=$(docker build -q -t ghostinspector/test-runner-node ./test-runner-node)
+            docker tag $IMAGE_ID ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
+      - run:
+          name: Build node-app image
+          command: |
+            docker build -t node-app:0.1.$CIRCLE_BUILD_NUM ./test/node-app
+      - run:
+          name: Execute test
+          command: |
+            docker run \
+              -e NGROK_TOKEN=$NGROK_TOKEN \
+              -e GI_API_KEY=$GI_API_KEY \
+              -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
+              -e GI_PARAM_sha=$CIRCLE_SHA1 \
+              -e GI_PARAM_build=$CIRCLE_BUILD_NUM \
+              -e APP_PORT=8000 \
+              -e MY_ENV_VAR=my-env-var \
+              node-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1 --build=$CIRCLE_BUILD_NUM
+      - run:
+          name: Push new ghostinspector/test-runner-node image to Docker Hub
+          command: |
+            if [ $CIRCLE_BRANCH = 'master' ]; then
+              echo "Pushing new image to Docker Hub"
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push ghostinspector/test-runner-node:0.1.$CIRCLE_BUILD_NUM
+              docker push ghostinspector/test-runner-node:latest
+            else
+              echo "On branch $CIRCLE_BRANCH, nothing else to do."
+            fi
+
+  build-and-test-standalone-image:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Build ghostinspector/test-runner-standalone
+          command: |
+            cp -R ./includes/ ./test-runner-standalone/includes
+            IMAGE_ID=$(docker build -q -t ghostinspector/test-runner-standalone ./test-runner-standalone)
+            docker tag $IMAGE_ID ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
+      - run:
+          name: Build standalone-app image
+          command: |
+            docker build -t standalone-app:0.1.$CIRCLE_BUILD_NUM ./test/standalone-app
+      - run:
+          name: Execute test
+          command: |
+            docker network create temp-network
+            docker run -d \
+              --network temp-network \
+              --name standalone-app \
+              standalone-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1
+            docker run \
+              -e NGROK_TOKEN=$NGROK_TOKEN \
+              -e GI_API_KEY=$GI_API_KEY \
+              -e GI_SUITE=5a9f04539d311c32b43f49d6 \
+              -e GI_PARAM_sha=$CIRCLE_SHA1 \
+              -e APP_PORT=standalone-app:8000 \
+              --network temp-network \
+              ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
+      - run:
+          name: Push new ghostinspector/test-runner-standalone image to Docker Hub
+          command: |
+            if [ $CIRCLE_BRANCH = 'master' ]; then
+              echo "Pushing new image to Docker Hub"
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
+              docker push ghostinspector/test-runner-standalone:latest
+            else
+              echo "On branch $CIRCLE_BRANCH, nothing else to do."
+            fi
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build-and-test-base-image
+      - build-and-test-standalone-image
