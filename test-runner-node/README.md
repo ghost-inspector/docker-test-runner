@@ -34,7 +34,7 @@ ENV GI_PARAM_myVar some-custom-value
 ENV NGROK_TOKEN <your-ngrok-token>
 
 # Pass your application entrypoint into our test runner script
-ENTRYPOINT ["/bin/runghostinspectorsuite", "index.js"]
+CMD ["index.js"]
 ```
 
 Now build and run your image:
@@ -66,18 +66,18 @@ runner:
  * `GI_PARAM_myVar` (optional) - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
 
 ### Entry point
-The last line of your `Dockerfile` should be `ENTRYPOINT`, which should look
+The last line of your `Dockerfile` should be `CMD`, which should look
 something like this:
 
 ```
-ENTRYPOINT ["/bin/runghostinspectorsuite", "index.js", "--foo=bar"]
+CMD ["index.js", "--foo=bar"]
 ```
 
 ...where `index.js` is the entrypoint for your application. Under the hood, our
 [test runner script](includes/bin/runghostinspectorsuite) will perform the
 following:
 
- * start the entrypoint specified in `ENTRYPOINT` (eg: `index.js`) with `node`
+ * start the entrypoint specified in `CMD` (eg: `index.js`) with `node`
  * start the `ngrok` daemon and open a tunnel to `localhost:PORT`
  * execute the Ghost Inspector test suite based on `GI_SUITE`
  * poll the Ghost Inspector API for `passing` status until a result is provided
