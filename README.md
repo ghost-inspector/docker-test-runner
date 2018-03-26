@@ -46,7 +46,19 @@ be found in the [README](./test-runner-standalone).
 
 Development
 ===========
-Changes pushed to Github will automatically be built (and published) by our CI system.
+Changes pushed to Github will automatically be built (and published) by our CI system. For local testing, images
+can be build with the command:
+
+```
+./build
+```
+
+If you wish to target a single image, you may pass the name as a parameter, either `node` or `standalone`:
+
+```
+./build node
+```
+
 
 Support
 =======
