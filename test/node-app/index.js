@@ -17,10 +17,10 @@ http.createServer(function (req, res) {
       <li id="envVar">${process.env.MY_ENV_VAR}</li>
 
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
-      <li id="sha">${process.argv[3]}</li>
+      <li id="sha">${process.argv[2]}</li>
 
       <!-- build is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
-      <li id="build">${process.argv[4]}</li>
+      <li id="build">${process.argv[3]}</li>
     </ul>
   </body>
 </html>
