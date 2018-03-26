@@ -1,0 +1,20 @@
+#!/bin/bash
+set -e
+
+DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+
+ARGS=$1
+
+IMGS=${ARGS:=node standalone} 
+echo "Building image(s): $IMGS"
+for img in $IMGS; do
+  echo ""
+  echo "Building ghostinspector/test-runner-$img..."
+  # docker cannot see outside of it's current context, copy dependencies temporarily
+  cp -R $DIR/includes/ $DIR/test-runner-$img/includes
+  cd $DIR/test-runner-$img && docker build -t ghostinspector/test-runner-$img .
+  rm -R $DIR/test-runner-$img/includes
+  echo "Done."
+done
+
+# main $1
