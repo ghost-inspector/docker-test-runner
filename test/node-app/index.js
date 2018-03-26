@@ -16,9 +16,6 @@ http.createServer(function (req, res) {
       <!-- MY_ENV_VAR is provided through the application environment -->
       <li id="envVar">${process.env.MY_ENV_VAR}</li>
 
-      <!-- cliVar is provided through the command line -->
-      <li id="cliVar">${process.argv[2]}</li>
-
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
       <li id="sha">${process.argv[3]}</li>
 
