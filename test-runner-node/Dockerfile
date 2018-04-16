@@ -1,11 +1,6 @@
 FROM node:8
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
-# add our user
-RUN useradd -ms /bin/bash ghostinspector
-USER ghostinspector
-WORKDIR /home/ghostinspector
-
 # Install unzip
 RUN wget -qO- https://oss.oracle.com/el4/unzip/unzip.tar | tar -x -C /bin/
 
@@ -24,6 +19,11 @@ RUN chmod +x /bin/jq
 
 # Add the script that will run the tes suite.
 COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
+
+# add our user
+RUN useradd -ms /bin/bash ghostinspector
+USER ghostinspector
+WORKDIR /home/ghostinspector
 
 # This is the port you can use to interact with ngrok's API.
 EXPOSE 4040
