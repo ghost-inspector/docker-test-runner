@@ -19,6 +19,11 @@ RUN set -x \
 # Add ngrok config.
 COPY ./includes/ngrok.yml /home/ngrok/.ngrok2/
 
+# add our user
+RUN useradd -ms /bin/bash ghostinspector
+USER ghostinspector
+WORKDIR /home/ghostinspector
+
 # Install jq.
 ADD http://stedolan.github.io/jq/download/linux64/jq /bin/jq
 RUN chmod +x /bin/jq

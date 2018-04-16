@@ -1,6 +1,11 @@
 FROM node:8
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
+# add our user
+RUN useradd -ms /bin/bash ghostinspector
+USER ghostinspector
+WORKDIR /home/ghostinspector
+
 # Install unzip
 RUN wget -qO- https://oss.oracle.com/el4/unzip/unzip.tar | tar -x -C /bin/
 
