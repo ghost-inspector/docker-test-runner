@@ -7,6 +7,9 @@ set -e
 : "${APP_PORT:?APP_PORT env var is required}"
 : ${STARTUP_DELAY:=3}
 
+# set TERM if not present, ngrok will fail with missing TERM
+: ${TERM:=xterm}
+
 # obscure sensitive tokens from output
 PRINT_NGROK_TOKEN="$(echo $NGROK_TOKEN | head -c4)****************"
 PRINT_GI_API_KEY="$(echo $GI_API_KEY | head -c4)****************"

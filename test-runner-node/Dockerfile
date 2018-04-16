@@ -20,6 +20,11 @@ RUN chmod +x /bin/jq
 # Add the script that will run the tes suite.
 COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 
+# add our user
+RUN useradd -ms /bin/bash ghostinspector
+USER ghostinspector
+WORKDIR /home/ghostinspector
+
 # This is the port you can use to interact with ngrok's API.
 EXPOSE 4040
 

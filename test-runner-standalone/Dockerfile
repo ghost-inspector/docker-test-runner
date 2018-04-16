@@ -19,12 +19,18 @@ RUN set -x \
 # Add ngrok config.
 COPY ./includes/ngrok.yml /home/ngrok/.ngrok2/
 
+
 # Install jq.
 ADD http://stedolan.github.io/jq/download/linux64/jq /bin/jq
 RUN chmod +x /bin/jq
 
 # Add the script that will run the tes suite.
 COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
+
+# add our user
+RUN useradd -ms /bin/bash ghostinspector
+USER ghostinspector
+WORKDIR /home/ghostinspector
 
 # This is the port you can use to interact with ngrok's API.
 EXPOSE 4040
