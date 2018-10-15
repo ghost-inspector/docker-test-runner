@@ -18,7 +18,7 @@ orbs:
                 docker run -d \
                   --network gi-test-network
                   --name test-application
-                  << parameters.image >>
+                  << parameters.app_image >>
           - run_standalone_test
     commands:
       run_standalone_test:
