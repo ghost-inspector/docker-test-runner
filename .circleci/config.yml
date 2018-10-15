@@ -24,8 +24,8 @@ orbs:
               name: Start test application
               command: |
                 docker run -d \
-                  --network gi-test-network
-                  --name test-application
+                  --network gi-test-network \
+                  --name test-application \
                   << parameters.app_image >>
           - run_standalone_test:
               ngrok_token: << parameters.ngrok_token >>
