@@ -1,4 +1,51 @@
-version: 2
+version: 2.1
+orbs:
+  gi:
+    jobs:
+      test_standalone_image:
+        parameters:
+          app_image:
+            type: string
+        steps:
+          - setup_remote_docker
+          - run:
+              name: Create ghost-inspector docker network
+              command: docker network create gi-test-network
+          - run:
+              name: Start test application
+              command: |
+                docker run -d \
+                  --network gi-test-network
+                  --name test-application
+                  << parameters.image >>
+          - run_standalone_test
+    commands:
+      run_standalone_test:
+        parameters:
+          ngrok_token:
+            type: string
+          api_key:
+            type: string
+          suite_id:
+            type: string
+          app_port:
+            type: string
+        steps:
+          - run:
+              name: Execute Ghost Inspector test suite
+              command: |
+                docker run \
+                  -e NGROK_TOKEN=<< parameters.ngrok_token >> \
+                  -e GI_API_KEY=<< parameters.api_key >> \
+                  -e GI_SUITE=<< parameters.suite_id >> \
+                  -e APP_PORT=test-application:<< parameters.app_port >> \
+                  --network gi-test-network \
+                  ghostinspector/test-runner-standalone:0.1.81
+    executors:
+      standalone:
+        docker:
+          - image: docker:17.05.0-ce-git
+
 jobs:
   build-and-test-base-image:
     docker:
@@ -83,9 +130,17 @@ jobs:
             else
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
+
 workflows:
-  version: 2
   test:
     jobs:
       - build-and-test-base-image
       - build-and-test-standalone-image
+      - gi/test_standalone_image
+          ngrok_token: $NGROK_TOKEN
+          api_key: $GI_API_KEY
+          suite_id: $GI_SUITE
+          app_port: '8000'
+          app_image: standalone-app:0.1.$CIRCLE_BUILD_NUM
+          requires:
+            - build-and-test-standalone-image
