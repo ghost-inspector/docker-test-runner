@@ -143,7 +143,6 @@ jobs:
             else
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
-
       - run:
           name: Push new ghostinspector/standalone-app image to Docker Hub (for testing orbs)
           command: |
