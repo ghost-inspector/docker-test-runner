@@ -144,6 +144,14 @@ jobs:
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
 
+      - run:
+          name: Push new ghostinspector/standalone-app image to Docker Hub (for testing orbs)
+          command: |
+            echo "Pushing standalone-app to Docker Hub"
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
+            docker push ghostinspector/standalone-app:latest
+
 workflows:
   test:
     jobs:
@@ -154,6 +162,6 @@ workflows:
           api_key: $GI_API_KEY
           suite_id: $GI_SUITE
           app_port: '8000'
-          app_image: standalone-app:0.1.$CIRCLE_BUILD_NUM
+          app_image: ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
           requires:
             - build-and-test-standalone-image
