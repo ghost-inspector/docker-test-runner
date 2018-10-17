@@ -115,7 +115,7 @@ jobs:
       - run:
           name: Build standalone-app image
           command: |
-            docker build -t standalone-app:0.1.$CIRCLE_BUILD_NUM ./test/standalone-app
+            docker build -t ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM ./test/standalone-app
       - run:
           name: Execute test
           command: |
@@ -123,7 +123,7 @@ jobs:
             docker run -d \
               --network temp-network \
               --name standalone-app \
-              standalone-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1
+              ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1
             docker run \
               -e NGROK_TOKEN=$NGROK_TOKEN \
               -e GI_API_KEY=$GI_API_KEY \
