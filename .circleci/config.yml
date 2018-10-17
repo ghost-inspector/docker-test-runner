@@ -23,6 +23,7 @@ orbs:
           - run:
               name: Start test application
               command: |
+                docker pull << parameters.app_image >>
                 docker run -d \
                   --network gi-test-network \
                   --name test-application \
