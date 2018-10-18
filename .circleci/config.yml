@@ -143,6 +143,7 @@ jobs:
             echo "Pushing standalone-app to Docker Hub"
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
+            docker push ghostinspector/standalone-app:latest
       - run:
           name: Push new ghostinspector/test-runner-standalone image to Docker Hub
           command: |
