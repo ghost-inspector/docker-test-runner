@@ -166,6 +166,6 @@ workflows:
           api_key: $GI_API_KEY
           suite_id: $GI_SUITE
           app_port: '8000'
-          app_image: ghostinspector/standalone-app:0.1.latest
+          app_image: ghostinspector/standalone-app:latest
           requires:
             - build-and-test-standalone-image
