@@ -60,6 +60,7 @@ orbs:
         docker:
           - image: docker:17.05.0-ce-git
 
+
 jobs:
   build-and-test-base-image:
     docker:
