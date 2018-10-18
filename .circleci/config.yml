@@ -166,7 +166,7 @@ workflows:
       - gi/test_standalone_image:
           ngrok_token: $NGROK_TOKEN
           api_key: $GI_API_KEY
-          suite_id: $GI_SUITE
+          suite_id: 5a9f04539d311c32b43f49d6
           app_port: '8000'
           app_image: ghostinspector/standalone-app:latest
           requires:
