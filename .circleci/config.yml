@@ -48,13 +48,14 @@ orbs:
           - run:
               name: Execute Ghost Inspector test suite
               command: |
+                docker pull ghostinspector/test-runner-standalone:latest
                 docker run \
                   -e NGROK_TOKEN=<< parameters.ngrok_token >> \
                   -e GI_API_KEY=<< parameters.api_key >> \
                   -e GI_SUITE=<< parameters.suite_id >> \
                   -e APP_PORT=test-application:<< parameters.app_port >> \
                   --network gi-test-network \
-                  ghostinspector/test-runner-standalone:0.1.81
+                  ghostinspector/test-runner-standalone:latest
     executors:
       standalone:
         docker:
