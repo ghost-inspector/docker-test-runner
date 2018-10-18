@@ -117,7 +117,10 @@ jobs:
       - run:
           name: Build standalone-app image
           command: |
-            docker build -t ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM ./test/standalone-app
+            docker build \
+              -t ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM \
+              -t ghostinspector/standalone-app:latest \
+              ./test/standalone-app
       - run:
           name: Execute test
           command: |
@@ -135,6 +138,12 @@ jobs:
               --network temp-network \
               ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
       - run:
+          name: Push new ghostinspector/standalone-app image to Docker Hub (for testing orbs)
+          command: |
+            echo "Pushing standalone-app to Docker Hub"
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
+      - run:
           name: Push new ghostinspector/test-runner-standalone image to Docker Hub
           command: |
             if [ $CIRCLE_BRANCH = 'master' ]; then
@@ -145,12 +154,7 @@ jobs:
             else
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
-      - run:
-          name: Push new ghostinspector/standalone-app image to Docker Hub (for testing orbs)
-          command: |
-            echo "Pushing standalone-app to Docker Hub"
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker push ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
+
 
 workflows:
   test:
@@ -162,6 +166,6 @@ workflows:
           api_key: $GI_API_KEY
           suite_id: $GI_SUITE
           app_port: '8000'
-          app_image: ghostinspector/standalone-app:0.1.$CIRCLE_BUILD_NUM
+          app_image: ghostinspector/standalone-app:0.1.latest
           requires:
             - build-and-test-standalone-image
