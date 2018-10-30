@@ -2,6 +2,17 @@ version: 2.1
 
 orbs:
   ghostinspector: ghostinspector/test-runner@dev:01
+jobs:
+  execute-test:
+    executor: default
+    steps:
+      - ghostinspector/execute-test:
+          api-key: $GI_API_KEY
+          id: 5ab90cce74cdb5602b02601c
+          extra-params:
+            foo: bar
+            fiz: faz
+          wait: true
 # jobs:
   # build-and-test-base-image:
   #   docker:
@@ -111,10 +122,4 @@ workflows:
       #     app_image: ghostinspector/standalone-app:latest
       #     requires:
       #       - build-and-test-standalone-image
-      - ghostinspector/execute-test:
-          api-key: $GI_API_KEY
-          id: 5ab90cce74cdb5602b02601c
-          extra-params:
-            foo: bar
-            fiz: faz
-          wait: true
+      - execute-test
