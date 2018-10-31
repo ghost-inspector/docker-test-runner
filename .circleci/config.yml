@@ -8,7 +8,7 @@ jobs:
       - image: ghostinspector/test-runner-standalone
     steps:
       - ghostinspector/execute-test:
-          api-key: $GI_API_KEY
+          api-key: af923ddcd57dcaca093c7369f3768abf631bb379
           id: 5ab90cce74cdb5602b02601c
           extra-params: '{"foo": "bar"}'
           wait: true
