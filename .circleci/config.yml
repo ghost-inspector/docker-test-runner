@@ -13,7 +13,6 @@ jobs:
           extra-params: '{"foo": "bar"}'
           wait: true
 
-
 # jobs:
   # build-and-test-base-image:
   #   docker:
