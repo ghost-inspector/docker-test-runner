@@ -3,7 +3,6 @@ orbs:
   ghostinspector: ghostinspector/test-runner@dev:02
 jobs:
   execute-test-orb:
-    executor: default
     steps:
       - ghostinspector/execute-test:
           api-key: $GI_API_KEY
