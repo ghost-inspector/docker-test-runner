@@ -12,7 +12,6 @@ jobs:
           id: 5ab90cce74cdb5602b02601c
           extra-params: '{"foo": "bar"}'
           wait: true
-
 # jobs:
   # build-and-test-base-image:
   #   docker:
