@@ -2,13 +2,10 @@ version: 2.1
 orbs:
   ghostinspector: ghostinspector/test-runner@dev:02
 
-executors:
-  bionic:
-    docker:
-      - image: circleci/bionic
-
 jobs:
   execute-test-orb:
+    docker: 
+      - image: docker:17.05.0-ce-git
     steps:
       - ghostinspector/execute-test:
           api-key: $GI_API_KEY
