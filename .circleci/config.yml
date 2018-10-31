@@ -1,6 +1,12 @@
 version: 2.1
 orbs:
   ghostinspector: ghostinspector/test-runner@dev:02
+
+executors:
+  bionic:
+    docker:
+      - image: circleci/bionic
+
 jobs:
   execute-test-orb:
     steps:
