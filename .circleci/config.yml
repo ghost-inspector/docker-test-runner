@@ -5,7 +5,7 @@ orbs:
 jobs:
   execute-test-orb:
     docker: 
-      - image: byrnedo/alpine-curl
+      - image: ghostinspector/test-runner-standalone
     steps:
       - ghostinspector/execute-test:
           api-key: $GI_API_KEY
