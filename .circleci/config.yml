@@ -1,7 +1,6 @@
 version: 2.1
-
 orbs:
-  ghostinspector: ghostinspector/test-runner@dev:01
+  ghostinspector: ghostinspector/test-runner@dev:02
 jobs:
   execute-test-orb:
     executor: default
