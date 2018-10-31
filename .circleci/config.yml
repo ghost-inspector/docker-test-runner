@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   ghostinspector: ghostinspector/test-runner@dev:01
 jobs:
-  execute-test:
+  execute-test-orb:
     executor: default
     steps:
       - ghostinspector/execute-test:
@@ -122,4 +122,4 @@ workflows:
       #     app_image: ghostinspector/standalone-app:latest
       #     requires:
       #       - build-and-test-standalone-image
-      - execute-test
+      - execute-test-orb
