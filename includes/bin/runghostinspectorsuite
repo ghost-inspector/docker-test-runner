@@ -89,7 +89,7 @@ PASSING=
 EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1$GI_EXTRA_PARAMS"
 if [ $GI_PARAMS_JSON != '' ]; then
   echo "Executing suite (POST): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY ($GI_PARAMS_JSON)"
-  RESULT_ID=$(curl -s -XPOST -H'Content-Type: application/json' -d'$GI_PARAMS_JSON' "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
+  RESULT_ID=$(curl -s -XPOST -H'Content-Type: application/json' -d''$GI_PARAMS_JSON'' "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
 else
   echo "Executing suite (GET): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
   RESULT_ID=$(curl -s$POST_OPTION "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
