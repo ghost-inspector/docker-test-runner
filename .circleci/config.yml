@@ -83,7 +83,7 @@ jobs:
               -e NGROK_TOKEN=$NGROK_TOKEN \
               -e GI_API_KEY=$GI_API_KEY \
               -e GI_SUITE=5a9f04539d311c32b43f49d6 \
-              -e GI_PARAMS_JSON='{"sha":"$CIRCLE_SHA1"}' \
+              -e GI_PARAMS_JSON='{"sha":"'$CIRCLE_SHA1'"}' \
               -e APP_PORT=standalone-app-2:8000 \
               --network temp-network \
               ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
