@@ -75,7 +75,6 @@ jobs:
       - run:
           name: Execute test using JSON params
           command: |
-            docker network create temp-network
             docker run -d \
               --network temp-network \
               --name standalone-app-2 \
