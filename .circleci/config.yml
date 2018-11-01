@@ -98,6 +98,7 @@ jobs:
             else
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
+
 workflows:
   version: 2
   test:
