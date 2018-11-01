@@ -96,7 +96,7 @@ if [ $GI_PARAMS_JSON != '' ]; then
     exit 1
   fi
   # if we got here the data is good
-  POST_OPTION=" -XPOST -d'$GI_PARAMS_JSON'"
+  POST_OPTION=" -XPOST -H'Content-Type: application/json' -d'$GI_PARAMS_JSON'"
   echo "JSON params specified, executing suite with $POST_OPTION"
 fi
 
