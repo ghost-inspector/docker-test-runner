@@ -7,6 +7,9 @@ set -e
 : "${APP_PORT:?APP_PORT env var is required}"
 : ${STARTUP_DELAY:=3}
 
+# ability to provide extra params via JSON
+: ${GI_PARAMS_JSON:=''}
+
 # set TERM if not present, ngrok will fail with missing TERM
 : ${TERM:=xterm}
 
@@ -84,8 +87,13 @@ PASSING=
 
 # Execute Ghost Inspector suite via API and grab the result ID
 EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1$GI_EXTRA_PARAMS"
-echo "Executing suite: $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
-RESULT_ID=$(curl -s "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
+if [ $GI_PARAMS_JSON != '' ]; then
+  echo "Executing suite (POST): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY ($GI_PARAMS_JSON)"
+  RESULT_ID=$(curl -s -XPOST -H'Content-Type: application/json' -d''$GI_PARAMS_JSON'' "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
+else
+  echo "Executing suite (GET): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
+  RESULT_ID=$(curl -s$POST_OPTION "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
+fi
 
 # for the suite result, sleep for a few seconds if it hasn't changed
 echo "Polling for suite results (ID: $RESULT_ID)"

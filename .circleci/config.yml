@@ -57,7 +57,7 @@ jobs:
           command: |
             docker build -t standalone-app:0.1.$CIRCLE_BUILD_NUM ./test/standalone-app
       - run:
-          name: Execute test
+          name: Execute test using environment params
           command: |
             docker network create temp-network
             docker run -d \
@@ -73,6 +73,21 @@ jobs:
               --network temp-network \
               ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
       - run:
+          name: Execute test using JSON params
+          command: |
+            docker run -d \
+              --network temp-network \
+              --name standalone-app-2 \
+              standalone-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1
+            docker run \
+              -e NGROK_TOKEN=$NGROK_TOKEN \
+              -e GI_API_KEY=$GI_API_KEY \
+              -e GI_SUITE=5a9f04539d311c32b43f49d6 \
+              -e GI_PARAMS_JSON='{"sha":"'$CIRCLE_SHA1'"}' \
+              -e APP_PORT=standalone-app-2:8000 \
+              --network temp-network \
+              ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
+      - run:
           name: Push new ghostinspector/test-runner-standalone image to Docker Hub
           command: |
             if [ $CIRCLE_BRANCH = 'master' ]; then
@@ -83,6 +98,8 @@ jobs:
             else
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
+
+
 workflows:
   version: 2
   test:
