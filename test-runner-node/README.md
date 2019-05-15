@@ -64,6 +64,7 @@ runner:
  * `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
  * `STARTUP_DELAY` (optional) - seconds to wait for application and ngrok each to start up, defaults to 3 seconds
  * `GI_PARAM_myVar` (optional) - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
+ * `GI_PASSING_STATUS_KEY` (optional) - set this to `screenshotComparePassing` if you wish to fail the build based on the screenshot status.
 
 ### Entry point
 The last line of your `Dockerfile` should be `CMD`, which should look
