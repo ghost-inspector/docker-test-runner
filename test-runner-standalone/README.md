@@ -67,7 +67,7 @@ to the same `test-network` so all the DNS and networking magic can happen. Also
 note that you can send custom variables to the API call when we execute your
 test suite by using a custom environment variable named `GI_PARAM_varName`
 where `varName` is the name of your variable. This will be available in your
-Ghost Inspector tests under `{{varName}}` at runtime.
+Ghost Inspector tests under `{{varName}}` at runtime. Finally, if you wish to have the build status based on the screenshot instead, you may want to add an environment variable for `GI_PASSING_STATUS_KEY` with a value of `screenshotComparePassing`.
 
 Once this container fires up, it will perform the exact same set of actions as
 before:
