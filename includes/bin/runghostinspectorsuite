@@ -10,6 +10,9 @@ set -e
 # ability to provide extra params via JSON
 : ${GI_PARAMS_JSON:=''}
 
+# ability to use screenshot to pass/fail test
+: ${GI_PASSING_STATUS_KEY:='passing'}
+
 # set TERM if not present, ngrok will fail with missing TERM
 : ${TERM:=xterm}
 
@@ -21,6 +24,7 @@ echo "NGROK_TOKEN: $PRINT_NGROK_TOKEN"
 echo "GI_API_KEY: $PRINT_GI_API_KEY"
 echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
+echo "PASSING_STATUS_KEY: $GI_PASSING_STATUS_KEY"
 
 # check for additional URL parameters in the environment
 set +e
@@ -100,16 +104,16 @@ echo "Polling for suite results (ID: $RESULT_ID)"
 while [ "$STATUS" = 'null' ]; do
   sleep 5
   SUITE_RESULT=$(curl -s "https://api.ghostinspector.com/v1/suite-results/$RESULT_ID/?apiKey=$GI_API_KEY")
-  STATUS=$(echo $SUITE_RESULT | jq -r '.data.passing')
+  STATUS=$(echo $SUITE_RESULT | jq -r '.data.'$GI_PASSING_STATUS_KEY'')
   if [ "$STATUS" = 'null' ]; then
     echo " - status: running..."
   else
-    echo " - status: done, passing: $STATUS"
+    echo " - status: done, $GI_PASSING_STATUS_KEY: $STATUS"
   fi
 done
 
 # status has been updated, check results for "passing"
-if [ "$(echo $SUITE_RESULT | jq -r '.data.passing')" != 'true' ]; then
+if [ "$(echo $SUITE_RESULT | jq -r '.data.'$GI_PASSING_STATUS_KEY'')" != 'true' ]; then
   echo "Suite failed! ¯\_(ツ)_/¯"
   PASSING=1
 else 
