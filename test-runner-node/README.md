@@ -1,7 +1,7 @@
 Ghost Inspector test runner Docker images
 -----------------------------------------
 
-**Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/master.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
+**Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/stable.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
 
 [Ghost Inspector](https://ghostinspector.com/docs/getting-started/) is an automated website testing
 and monitoring service that checks for problems with your website or

@@ -1,7 +1,7 @@
 Docker Test Runner
 ==================
 
-**Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/master.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
+**Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/stable.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
 
 
 Ghost Inspector test runner images can be used within your local or CI
