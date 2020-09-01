@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:12
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
 # Install unzip
