@@ -91,7 +91,7 @@ PASSING=
 
 # Execute Ghost Inspector suite via API and grab the result ID
 EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1$GI_EXTRA_PARAMS"
-if [ $GI_PARAMS_JSON != '' ]; then
+if [ "$GI_PARAMS_JSON" != "" ]; then
   echo "Executing suite (POST): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY ($GI_PARAMS_JSON)"
   RESULT_ID=$(curl -s -XPOST -H'Content-Type: application/json' -d''$GI_PARAMS_JSON'' "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
 else
@@ -101,11 +101,11 @@ fi
 
 # for the suite result, sleep for a few seconds if it hasn't changed
 echo "Polling for suite results (ID: $RESULT_ID)"
-while [ "$STATUS" = 'null' ]; do
+while [ "$STATUS" = "null" ]; do
   sleep 5
   SUITE_RESULT=$(curl -s "https://api.ghostinspector.com/v1/suite-results/$RESULT_ID/?apiKey=$GI_API_KEY")
   STATUS=$(echo $SUITE_RESULT | jq -r '.data.'$GI_PASSING_STATUS_KEY'')
-  if [ "$STATUS" = 'null' ]; then
+  if [ "$STATUS" = "null" ]; then
     echo " - status: running..."
   else
     echo " - status: done, $GI_PASSING_STATUS_KEY: $STATUS"
