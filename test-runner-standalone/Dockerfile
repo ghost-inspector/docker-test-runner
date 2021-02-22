@@ -18,7 +18,7 @@ ADD http://stedolan.github.io/jq/download/linux64/jq /bin/jq
 RUN chmod +x /bin/jq
 
 # Install the Ghost Inspector client.
-RUN npm install -g ghost-inspector
+RUN npm install ghost-inspector
 
 # Add the files that will run the test suite.
 COPY ./includes/bin/run-suite.js /bin/run-suite.js
