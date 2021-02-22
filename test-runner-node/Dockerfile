@@ -17,7 +17,11 @@ COPY ./includes/ngrok.yml /home/ngrok/.ngrok2/
 ADD http://stedolan.github.io/jq/download/linux64/jq /bin/jq
 RUN chmod +x /bin/jq
 
-# Add the script that will run the tes suite.
+# Install the Ghost Inspector client.
+RUN npm install -g ghost-inspector
+
+# Add the files that will run the test suite.
+COPY ./includes/bin/run-suite.js /bin/run-suite.js
 COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 
 # add our user

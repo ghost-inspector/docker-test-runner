@@ -19,8 +19,11 @@ http.createServer(function (req, res) {
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
       <li id="sha">${process.argv[2]}</li>
 
-      <!-- build is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
+      <!-- build is provided through the command line and is to test we can send more than one param using GI_PARAM_* -->
       <li id="build">${process.argv[3]}</li>
+
+      <!-- test that variables can be sent using GI_PARAMS_JSON -->
+      <li id="json">my-json-var</li>
     </ul>
   </body>
 </html>
