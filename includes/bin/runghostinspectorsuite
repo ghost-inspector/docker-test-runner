@@ -94,7 +94,7 @@ echo "Using JSON params: $GI_PARAMS_JSON"
 
 # change this to /bin/
 set +e
-OUTPUT=$(./run-suite.js $GI_SUITE "$GI_PARAMS_JSON")
+OUTPUT=$(/bin/run-suite.js $GI_SUITE "$GI_PARAMS_JSON")
 PASSING=$?
 
 echo "Passing: $PASSING"
