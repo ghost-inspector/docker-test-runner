@@ -25,7 +25,7 @@ jobs:
               -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
               -e GI_PARAM_sha=$CIRCLE_SHA1 \
               -e GI_PARAM_build=$CIRCLE_BUILD_NUM \
-              -e GI_PARAMS_JSON='{"jsonParam": 'my-json-var'}'
+              -e GI_PARAMS_JSON='{"jsonParam": "my-json-var"}'
               -e APP_PORT=8000 \
               -e MY_ENV_VAR=my-env-var \
               node-app:0.1.$CIRCLE_BUILD_NUM index.js --sha=$CIRCLE_SHA1 --build=$CIRCLE_BUILD_NUM
