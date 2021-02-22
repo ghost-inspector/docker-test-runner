@@ -106,4 +106,6 @@ workflows:
   test:
     jobs:
       - build-and-test-base-image
-      - build-and-test-standalone-image
+      - build-and-test-standalone-image:
+          requires:
+            - build-and-test-base-image
