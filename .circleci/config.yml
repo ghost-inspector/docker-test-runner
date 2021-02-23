@@ -25,7 +25,7 @@ jobs:
               -e GI_SUITE=5a9ebeab9d311c32b43f3f5d \
               -e GI_PARAM_sha=$CIRCLE_SHA1 \
               -e GI_PARAM_build=$CIRCLE_BUILD_NUM \
-              -e GI_PARAMS_JSON='{"jsonParam": "my-json-var"}' \
+              -e GI_PARAMS_JSON='{"jsonParam": "$CIRCLE_BUILD_NUM"}' \
               -e APP_PORT=8000 \
               -e MY_ENV_VAR=my-env-var \
               node-app:0.1.$CIRCLE_BUILD_NUM index.js --sha=$CIRCLE_SHA1 --build=$CIRCLE_BUILD_NUM
@@ -71,21 +71,7 @@ jobs:
               -e GI_SUITE=5a9f04539d311c32b43f49d6 \
               -e GI_PARAM_sha=$CIRCLE_SHA1 \
               -e APP_PORT=standalone-app:8000 \
-              --network temp-network \
-              ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
-      - run:
-          name: Execute test using JSON params
-          command: |
-            docker run -d \
-              --network temp-network \
-              --name standalone-app-2 \
-              standalone-app:0.1.$CIRCLE_BUILD_NUM --sha=$CIRCLE_SHA1
-            docker run \
-              -e NGROK_TOKEN=$NGROK_TOKEN \
-              -e GI_API_KEY=$GI_API_KEY \
-              -e GI_SUITE=5a9f04539d311c32b43f49d6 \
-              -e GI_PARAMS_JSON='{"sha":"'$CIRCLE_SHA1'"}' \
-              -e APP_PORT=standalone-app-2:8000 \
+              -e GI_PARAMS_JSON='{"jsonParam": "my-json-var"}' \
               --network temp-network \
               ghostinspector/test-runner-standalone:0.1.$CIRCLE_BUILD_NUM
       - run:
