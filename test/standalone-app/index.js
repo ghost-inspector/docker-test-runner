@@ -1,5 +1,8 @@
 var http = require('http'); 
 
+// This is provided at runtime
+const sha = process.argv[2];
+
 http.createServer(function (req, res) { 
   res.writeHead(200, {'Content-Type': 'text/html'}); 
   res.end(`
@@ -15,7 +18,7 @@ http.createServer(function (req, res) {
       to the Ghost Inspector test suite where they will be compared.
     </p>
     <ul>
-      <li id="sha">${process.argv[2]}</li>
+      <li id="sha">${sha}</li>
     </ul>
   </body>
 </html>

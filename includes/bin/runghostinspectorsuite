@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# Flag bash to fail the script if it encounters an error exit code
 set -e
 
 : "${NGROK_TOKEN:?NGROK_TOKEN env var is required}"
@@ -8,7 +10,7 @@ set -e
 : ${STARTUP_DELAY:=3}
 
 # ability to provide extra params via JSON
-: ${GI_PARAMS_JSON:=''}
+: ${GI_PARAMS_JSON:='{}'}
 
 # ability to use screenshot to pass/fail test
 : ${GI_PASSING_STATUS_KEY:='passing'}
@@ -26,21 +28,24 @@ echo "GI_SUITE: $GI_SUITE"
 echo "APP_PORT: $APP_PORT"
 echo "PASSING_STATUS_KEY: $GI_PASSING_STATUS_KEY"
 
-# check for additional URL parameters in the environment
+# check for additional ENV parameters in the environment
 set +e
 GI_ENV_PARAMS=$(env | grep "^GI_PARAM_.*")
 set -e
 GI_EXTRA_PARAMS=''
 
-# parse the extra URL parameters into usable format
+# parse the extra ENV parameters into usable format
 for param in $GI_ENV_PARAMS; do
   GI_PARAM=$(echo $param | sed 's/GI_PARAM_//g')
-  echo "Extra API parameter: $GI_PARAM"
-  GI_EXTRA_PARAMS="&$GI_PARAM$GI_EXTRA_PARAMS"
+  echo "Extra ENV parameter: $GI_PARAM"
+  VARNAME=$(echo $GI_PARAM | cut -d'=' -f1)
+  VALUE=$(echo $GI_PARAM | cut -d'=' -f2)
+  GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg value "$VALUE" '. + {'$VARNAME': $value}')
 done
 
 # server command will be all script params after $0
 SERVER="${@:1}"
+
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
   echo "Running application with args: $SERVER"
@@ -84,41 +89,21 @@ if [ "$START_URL" = "" ]; then
 fi
 echo "Using start URL: $START_URL"
 
-# Set up a couple variables to monitor result state
-STATUS='null'
-SUITE_RESULT=
-PASSING=
+# Inject the start url
+GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg startUrl "$START_URL" '. + {startUrl: $startUrl}')
+echo "Using JSON params: $GI_PARAMS_JSON"
 
-# Execute Ghost Inspector suite via API and grab the result ID
-EXECUTE_URL="https://api.ghostinspector.com/v1/suites/$GI_SUITE/execute/?startUrl=$START_URL&immediate=1$GI_EXTRA_PARAMS"
-if [ $GI_PARAMS_JSON != '' ]; then
-  echo "Executing suite (POST): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY ($GI_PARAMS_JSON)"
-  RESULT_ID=$(curl -s -XPOST -H'Content-Type: application/json' -d''$GI_PARAMS_JSON'' "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
-else
-  echo "Executing suite (GET): $EXECUTE_URL&apiKey=$PRINT_GI_API_KEY"
-  RESULT_ID=$(curl -s$POST_OPTION "$EXECUTE_URL&apiKey=$GI_API_KEY" | jq -r '.data._id')
-fi
+# Execute the suite
+set +e
+OUTPUT=$(GI_API_KEY=$GI_API_KEY & /bin/run-suite.js $GI_SUITE "$GI_PARAMS_JSON")
 
-# for the suite result, sleep for a few seconds if it hasn't changed
-echo "Polling for suite results (ID: $RESULT_ID)"
-while [ "$STATUS" = 'null' ]; do
-  sleep 5
-  SUITE_RESULT=$(curl -s "https://api.ghostinspector.com/v1/suite-results/$RESULT_ID/?apiKey=$GI_API_KEY")
-  STATUS=$(echo $SUITE_RESULT | jq -r '.data.'$GI_PASSING_STATUS_KEY'')
-  if [ "$STATUS" = 'null' ]; then
-    echo " - status: running..."
-  else
-    echo " - status: done, $GI_PASSING_STATUS_KEY: $STATUS"
-  fi
-done
+PASSING=$?
+echo "Passing: $PASSING"
 
-# status has been updated, check results for "passing"
-if [ "$(echo $SUITE_RESULT | jq -r '.data.'$GI_PASSING_STATUS_KEY'')" != 'true' ]; then
-  echo "Suite failed! ¯\_(ツ)_/¯"
-  PASSING=1
-else 
+if [ $PASSING -eq 0 ]; then
   echo "Suite passed! \o/"
-  PASSING=0
+else 
+  echo "Suite failed! ¯\_(ツ)_/¯"
 fi
 
 # clean up our processes

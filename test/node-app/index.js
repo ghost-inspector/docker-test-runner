@@ -1,4 +1,9 @@
-var http = require('http'); 
+var http = require('http');
+
+// These variables are provided at runtime
+const envVar = process.env.MY_ENV_VAR;
+const sha = process.argv[2];
+const buildNumber = process.argv[3];
 
 http.createServer(function (req, res) { 
   res.writeHead(200, {'Content-Type': 'text/html'}); 
@@ -14,13 +19,13 @@ http.createServer(function (req, res) {
     </p>
     <ul>
       <!-- MY_ENV_VAR is provided through the application environment -->
-      <li id="envVar">${process.env.MY_ENV_VAR}</li>
+      <li id="envVar">${envVar}</li>
 
       <!-- sha is provided through the command line and also sent to the suite execute API call for verification -->
-      <li id="sha">${process.argv[2]}</li>
+      <li id="sha">${sha}</li>
 
-      <!-- build is provided through the command line and is to test we can send more than one param to the API (tests the URL format 'foo=bar&wizards=awesome') -->
-      <li id="build">${process.argv[3]}</li>
+      <!-- build is provided through the command line and is to test we can send more than one param using GI_PARAM_* -->
+      <li id="build">${buildNumber}</li>
     </ul>
   </body>
 </html>
