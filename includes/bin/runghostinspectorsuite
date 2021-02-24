@@ -1,5 +1,7 @@
 #!/bin/bash
-# set -e
+
+# Flag bash to fail the script if it encounters an error exit code
+set -e
 
 : "${NGROK_TOKEN:?NGROK_TOKEN env var is required}"
 : "${GI_SUITE:?GI_SUITE env var is required}"
@@ -43,6 +45,7 @@ done
 
 # server command will be all script params after $0
 SERVER="${@:1}"
+
 # check if we need to start the application
 if [ "$SERVER" != "" ]; then
   echo "Running application with args: $SERVER"
@@ -88,15 +91,13 @@ echo "Using start URL: $START_URL"
 
 # Inject the start url
 GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg startUrl "$START_URL" '. + {startUrl: $startUrl}')
-
-### call script below here
 echo "Using JSON params: $GI_PARAMS_JSON"
 
-# change this to /bin/
+# Execute the suite
 set +e
 OUTPUT=$(GI_API_KEY=$GI_API_KEY & /bin/run-suite.js $GI_SUITE "$GI_PARAMS_JSON")
-PASSING=$?
 
+PASSING=$?
 echo "Passing: $PASSING"
 
 if [ $PASSING -eq 0 ]; then
