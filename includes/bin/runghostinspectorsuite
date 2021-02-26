@@ -43,6 +43,9 @@ for param in $GI_ENV_PARAMS; do
   GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg value "$VALUE" '. + {'$VARNAME': $value}')
 done
 
+# pass the status key in as a param
+GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg value "$GI_PASSING_STATUS_KEY" '. + {passingStatusKey: $value}')
+
 # server command will be all script params after $0
 SERVER="${@:1}"
 
@@ -96,8 +99,8 @@ echo "Using JSON params: $GI_PARAMS_JSON"
 # Execute the suite
 set +e
 OUTPUT=$(GI_API_KEY=$GI_API_KEY & /bin/run-suite.js $GI_SUITE "$GI_PARAMS_JSON")
-
 PASSING=$?
+echo $OUTPUT
 echo "Passing: $PASSING"
 
 if [ $PASSING -eq 0 ]; then

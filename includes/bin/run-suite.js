@@ -23,8 +23,16 @@ async function main(suiteId, params='{}') {
     usageAndExit()
   }
 
-  const [unused, passing] = await ghost.executeSuite(suiteId, params);
-  return passing
+  const [unused, passing, screenshotPassing] = await ghost.executeSuite(suiteId, params);
+  console.log('Got result:')
+  console.log(' -> passing:', passing)
+  console.log(' -> screenshotPassing', screenshotPassing)
+
+  if (params.passingStatusKey === 'screenshotComparePassing') {
+    return passing && screenshotPassing
+  } else {
+    return passing
+  }
 }
 
 main(process.argv[2], process.argv[3]).then((passing) => {
