@@ -33,4 +33,4 @@ WORKDIR /home/ghostinspector
 EXPOSE 4040
 
 # The primary script.
-ENTRYPOINT ["/bin/runghostinspectorsuite"]
+CMD ["/bin/runghostinspectorsuite"]
