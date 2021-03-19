@@ -20,8 +20,9 @@ RUN chmod +x /bin/jq
 # Install the Ghost Inspector client.
 RUN npm install ghost-inspector
 
-# Add the files that will run the test suite.
+# Add GI executables.
 COPY ./includes/bin/run-suite.js /bin/run-suite.js
+COPY ./includes/bin/run-test.js /bin/run-test.js
 COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 
 # add our user
@@ -33,4 +34,4 @@ WORKDIR /home/ghostinspector
 EXPOSE 4040
 
 # The primary script.
-ENTRYPOINT ["/bin/runghostinspectorsuite"]
+CMD ["/bin/runghostinspectorsuite"]
