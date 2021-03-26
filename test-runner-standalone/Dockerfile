@@ -10,9 +10,6 @@ RUN set -x \
  && unzip -o /ngrok.zip -d /bin \
  && rm -f /ngrok.zip
 
-# Add ngrok config.
-COPY ./includes/ngrok.yml /home/ngrok/.ngrok2/
-
 # Install jq.
 ADD http://stedolan.github.io/jq/download/linux64/jq /bin/jq
 RUN chmod +x /bin/jq
@@ -29,6 +26,9 @@ COPY ./includes/bin/runghostinspectorsuite /bin/runghostinspectorsuite
 RUN useradd -ms /bin/bash ghostinspector
 USER ghostinspector
 WORKDIR /home/ghostinspector
+
+# Add ngrok config (chown requires docker 17.09+)
+COPY --chown=ghostinspector:ghostinspector ./includes/ngrok.yml .ngrok2/
 
 # This is the port you can use to interact with ngrok's API.
 EXPOSE 4040
