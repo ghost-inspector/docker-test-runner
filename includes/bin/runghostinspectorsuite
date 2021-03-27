@@ -8,6 +8,9 @@ set -e
 : "${GI_API_KEY:?GI_API_KEY env var is required}"
 : "${APP_PORT:?APP_PORT env var is required}"
 : ${STARTUP_DELAY:=3}
+: ${APP_WAIT_TIMEOUT:=}
+: ${APP_WAIT_DELAY:=5}
+
 
 # ability to provide extra params via JSON
 : ${GI_PARAMS_JSON:='{}'}
@@ -17,6 +20,11 @@ set -e
 
 # set TERM if not present, ngrok will fail with missing TERM
 : ${TERM:=xterm}
+
+# prepend hostname to APP_PORT if not given - for wget below:
+if [ "$APP_PORT" -ge 0 ]; then
+	APP_PORT="localhost:$APP_PORT"
+fi
 
 # obscure sensitive tokens from output
 PRINT_NGROK_TOKEN="$(echo $NGROK_TOKEN | head -c4)****************"
@@ -95,6 +103,22 @@ echo "Using start URL: $START_URL"
 # Inject the start url
 GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg startUrl "$START_URL" '. + {startUrl: $startUrl}')
 echo "Using JSON params: $GI_PARAMS_JSON"
+
+# wait for app to be up:
+if [ -n "$APP_WAIT_TIMEOUT" ]; then
+  : $((APP_WAIT_RETRIES=$APP_WAIT_TIMEOUT/$APP_WAIT_DELAY))
+  APP_WAIT_TRY=1
+  until wget -t1 -T1 -q --max-redirect=2 $APP_PORT || [ $APP_WAIT_TRY -eq $APP_WAIT_RETRIES ]; do
+    echo "Waiting for $APP_PORT before running test suite... ($APP_WAIT_TRY/$APP_WAIT_RETRIES)"
+    : $((APP_WAIT_TRY=$APP_WAIT_TRY+1))
+    sleep $APP_WAIT_DELAY
+  done
+  if [ $APP_WAIT_TRY -eq $APP_WAIT_RETRIES ]; then
+    echo "$APP_PORT was not available in time"
+    exit 1
+  fi
+  echo "$APP_PORT is up, running test..."
+fi
 
 # Execute the suite
 set +e
