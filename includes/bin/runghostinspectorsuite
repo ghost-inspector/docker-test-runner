@@ -108,7 +108,7 @@ echo "Using JSON params: $GI_PARAMS_JSON"
 if [ -n "$APP_WAIT_TIMEOUT" ]; then
   : $((APP_WAIT_RETRIES=$APP_WAIT_TIMEOUT/$APP_WAIT_DELAY))
   APP_WAIT_TRY=1
-  until [ $APP_WAIT_TRY -eq $APP_WAIT_RETRIES ] || wget -t5 -T1 -q --max-redirect=0 $APP_PORT || [ "$?" -ge 5 ]; do
+  until [ $APP_WAIT_TRY -eq $APP_WAIT_RETRIES ] || wget -t1 -T$APP_WAIT_DELAY -q --max-redirect=0 $APP_PORT || [ "$?" -ge 5 ]; do
     echo "Waiting for $APP_PORT before running test suite... (check $APP_WAIT_TRY of $APP_WAIT_RETRIES)"
     : $((APP_WAIT_TRY=$APP_WAIT_TRY+1))
     sleep $APP_WAIT_DELAY
