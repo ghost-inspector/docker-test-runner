@@ -22,7 +22,7 @@ set -e
 : ${TERM:=xterm}
 
 # prepend hostname to APP_PORT if not given - for wget below:
-if [ "$APP_PORT" -ge 0 ]; then
+if [ "$APP_PORT" -ge 0 ] 2>/dev/null; then
 	APP_PORT="localhost:$APP_PORT"
 fi
 
