@@ -86,11 +86,39 @@ jobs:
               echo "On branch $CIRCLE_BRANCH, nothing else to do."
             fi
 
+  build-cli-image:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Build ghostinspector/cli
+          command: |
+            IMAGE_ID=$(docker build -q -t ghostinspector/cli ./cli)
+            docker tag $IMAGE_ID ghostinspector/cli:0.1.$CIRCLE_BUILD_NUM
+      - run:
+          name: Confirm build
+          command: |
+            docker run \
+              ghostinspector/cli:0.1.$CIRCLE_BUILD_NUM --version
+      - run:
+          name: Push new ghostinspector/cli image to Docker Hub
+          command: |
+            if [ $CIRCLE_BRANCH = 'stable' ]; then
+              echo "Pushing new image to Docker Hub"
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker push ghostinspector/cli:0.1.$CIRCLE_BUILD_NUM
+              docker push ghostinspector/cli:latest
+            else
+              echo "On branch $CIRCLE_BRANCH, nothing else to do."
+            fi
 
 workflows:
   version: 2
   test:
     jobs:
+      - build-cli-image
       - build-and-test-base-image
       - build-and-test-standalone-image:
           requires:
