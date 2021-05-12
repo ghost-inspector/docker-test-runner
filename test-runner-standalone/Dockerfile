@@ -16,6 +16,8 @@ RUN chmod +x /bin/jq
 
 # Install the Ghost Inspector client.
 RUN npm install ghost-inspector
+RUN ln -s /node_modules/.bin/ghost-inspector /bin/ghost-inspector
+RUN ln -s /node_modules/.bin/ghost-inspector /bin/cli
 
 # Add GI executables.
 COPY ./includes/bin/run-suite.js /bin/run-suite.js
