@@ -5,15 +5,14 @@ DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 ARGS=$1
 
-# IMGS=${ARGS:=cli test-runner-node test-runner-standalone} 
-IMGS=${ARGS:=cli} 
+IMGS=${ARGS:=cli test-runner-node test-runner-standalone} 
 echo "Building image(s): $IMGS"
 for img in $IMGS; do
   echo ""
   echo "Building ghostinspector/$img..."
   # docker cannot see outside of it's current context, copy dependencies temporarily
   cp -R $DIR/includes/ $DIR/$img/includes
-  cd $DIR/$img && docker build --no-cache -t ghostinspector/$img .
+  cd $DIR/$img && docker build -t ghostinspector/$img .
   rm -R $DIR/$img/includes
   echo "Done."
 done
