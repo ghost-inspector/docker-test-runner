@@ -10,4 +10,4 @@ RUN npm install ghost-inspector
 RUN ln -s /node_modules/.bin/ghost-inspector /bin/ghost-inspector
 
 # The primary script.
-ENTRYPOINT ["/usr/local/bin/ghost-inspector"]
+ENTRYPOINT ["/bin/ghost-inspector"]
