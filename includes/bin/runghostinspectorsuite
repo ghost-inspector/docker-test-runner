@@ -8,8 +8,7 @@ set -e
 : "${GI_API_KEY:?GI_API_KEY env var is required}"
 : "${APP_PORT:?APP_PORT env var is required}"
 : ${STARTUP_DELAY:=3}
-: ${APP_WAIT_TIMEOUT:=30}
-: ${APP_WAIT_DELAY:=5}
+: ${APP_WAIT_TIMEOUT:=}
 
 # ability to provide extra params via JSON
 : ${GI_PARAMS_JSON:='{}'}
@@ -105,7 +104,6 @@ echo "Using JSON params: $GI_PARAMS_JSON"
 
 # Wait for application startup, if specified
 if [ -n "$APP_WAIT_TIMEOUT" ]; then
-  echo "Waiting for app response at $APP_PORT (timeout after $APP_WAIT_TIMEOUT)"
   /usr/bin/wait-for-it $APP_PORT -t $APP_WAIT_TIMEOUT
   echo "$APP_PORT is up, continuing..."
 fi
