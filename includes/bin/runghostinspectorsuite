@@ -21,7 +21,7 @@ set -e
 
 # prepend hostname to APP_PORT if not specified
 if [ "$APP_PORT" -ge 0 ] 2>/dev/null; then
-	APP_PORT="localhost:$APP_PORT"
+  APP_PORT="localhost:$APP_PORT"
 fi
 
 # obscure sensitive tokens from output

@@ -5,8 +5,7 @@ DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 ARGS=$1
 
-# IMGS=${ARGS:=cli test-runner-node test-runner-standalone} 
-IMGS=${ARGS:=test-runner-standalone} 
+IMGS=${ARGS:=cli test-runner-node test-runner-standalone} 
 echo "Building image(s): $IMGS"
 for img in $IMGS; do
   echo ""
@@ -17,5 +16,3 @@ for img in $IMGS; do
   rm -R $DIR/$img/includes
   echo "Done."
 done
-
-# main $1

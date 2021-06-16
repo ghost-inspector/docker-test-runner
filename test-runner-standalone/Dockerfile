@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:12
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
 # Install wait-for-it
