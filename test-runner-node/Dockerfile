@@ -1,6 +1,11 @@
 FROM node:12
 MAINTAINER Ghost Inspector <help@ghostinspector.com>
 
+# Install wait-for-it
+RUN apt-get update \
+  && apt-get install -y wait-for-it \
+  && rm -rf /var/lib/apt/lists/*
+
 # Install unzip
 RUN wget -qO- https://oss.oracle.com/el4/unzip/unzip.tar | tar -x -C /bin/
 

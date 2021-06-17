@@ -16,5 +16,3 @@ for img in $IMGS; do
   rm -R $DIR/$img/includes
   echo "Done."
 done
-
-# main $1

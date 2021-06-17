@@ -1,5 +1,4 @@
-Ghost Inspector test runner Docker images
------------------------------------------
+## Ghost Inspector test runner Docker images
 
 **Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/stable.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
 
@@ -14,10 +13,10 @@ against another running Docker container within your cluster.
 There is also single-container Docker image available
 [here](https://hub.docker.com/r/ghostinspector/test-runner-node/).
 
-Multi-container test runner
----------------------------
+## Multi-container test runner
+
 Even in more complex scenarios it is still possible to test your application
-through the magic of Docker by using the 
+through the magic of Docker by using the
 `ghost-inspector/test-runner-standalone` image and
 [Docker container networking](https://docs.docker.com/v17.09/engine/userguide/networking/).
 
@@ -43,7 +42,7 @@ $ docker run -d --name my-app --network test-network <my-image>
 ```
 
 Here we have named the new container `my-app` and connected it to the network
-`test-network`. Once that's up and running, we can fire up the Ghost Inspector 
+`test-network`. Once that's up and running, we can fire up the Ghost Inspector
 `test-runner-standalone` container which will run our suite against our running
 app:
 
@@ -54,6 +53,7 @@ $ docker run \
   -e GI_SUITE=<my-suite-id> \
   -e GI_PARAM_myVar=foo \
   -e APP_PORT=my-app:8000 \
+  -e APP_WAIT_TIMEOUT=15 \
   --network test-network \
   ghostinspector/test-runner-standalone
 ```
@@ -62,7 +62,9 @@ Make sure you change out all the environment variables to your own custom
 values for `NGROK_TOKEN`, `GI_API_KEY`, and `GI_SUITE`. Notice that for
 `APP_PORT` we've passed in `my-app:8000`, `my-app` will resolve to our running
 docker container that we named `my-app` and `8000` assumes that is the port
-that our application is running on. Finally we also connect this new container
+that our application is running on. We've also specified an `APP_WAIT_TIMEOUT`
+which will ping `my-app:8000` for up to `15` seconds before executing our suite.
+Finally we also connect this new container
 to the same `test-network` so all the DNS and networking magic can happen. Also
 note that you can send custom variables to the API call when we execute your
 test suite by using a custom environment variable named `GI_PARAM_varName`
@@ -72,13 +74,13 @@ Ghost Inspector tests under `{{varName}}` at runtime. Finally, if you wish to ha
 Once this container fires up, it will perform the exact same set of actions as
 before:
 
- * start the `ngrok` daemon and open a tunnel to `my-app:8000`
- * execute the Ghost Inspector test suite based on `GI_SUITE`
- * poll the Ghost Inspector API for `passing` status until a result is provided
- * exit with the pass (`0`) or fail (`1`) status
+- start the `ngrok` daemon and open a tunnel to `my-app:8000`
+- execute the Ghost Inspector test suite based on `GI_SUITE`
+- poll the Ghost Inspector API for `passing` status until a result is provided
+- exit with the pass (`0`) or fail (`1`) status
 
-LICENSE
-=======
+# LICENSE
+
 ```
 The MIT License
 
@@ -103,6 +105,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-Support
-=======
+# Support
+
 Please open issues in Github or send questions to [Ghost Inspector support](https://ghostinspector.com/support/)

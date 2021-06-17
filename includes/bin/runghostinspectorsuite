@@ -8,6 +8,7 @@ set -e
 : "${GI_API_KEY:?GI_API_KEY env var is required}"
 : "${APP_PORT:?APP_PORT env var is required}"
 : ${STARTUP_DELAY:=3}
+: ${APP_WAIT_TIMEOUT:=}
 
 # ability to provide extra params via JSON
 : ${GI_PARAMS_JSON:='{}'}
@@ -17,6 +18,11 @@ set -e
 
 # set TERM if not present, ngrok will fail with missing TERM
 : ${TERM:=xterm}
+
+# prepend hostname to APP_PORT if not specified
+if [ "$APP_PORT" -ge 0 ] 2>/dev/null; then
+  APP_PORT="localhost:$APP_PORT"
+fi
 
 # obscure sensitive tokens from output
 PRINT_NGROK_TOKEN="$(echo $NGROK_TOKEN | head -c4)****************"
@@ -95,6 +101,12 @@ echo "Using start URL: $START_URL"
 # Inject the start url
 GI_PARAMS_JSON=$(echo "$GI_PARAMS_JSON" | jq --arg startUrl "$START_URL" '. + {startUrl: $startUrl}')
 echo "Using JSON params: $GI_PARAMS_JSON"
+
+# Wait for application startup, if specified
+if [ -n "$APP_WAIT_TIMEOUT" ]; then
+  /usr/bin/wait-for-it $APP_PORT -t $APP_WAIT_TIMEOUT
+  echo "$APP_PORT is up, continuing..."
+fi
 
 # Execute the suite
 set +e

@@ -1,5 +1,4 @@
-Ghost Inspector test runner Docker images
------------------------------------------
+## Ghost Inspector test runner Docker images
 
 **Build status**: ![build status](https://circleci.com/gh/ghost-inspector/docker-test-runner/tree/stable.svg?style=shield&circle-token=245dca7e57995c5746b1fdb43ed8d645a6c8aa81)
 
@@ -14,10 +13,10 @@ against your local Docker application.
 There is also a standalone, multi-container Docker image available
 [here](https://hub.docker.com/r/ghostinspector/test-runner-standalone/).
 
+# Quickstart
 
-Quickstart
-==========
 Example `Dockerfile`:
+
 ```
 FROM ghostinspector/test-runner-node
 
@@ -44,29 +43,32 @@ $ docker build -t my-app .
 $ docker run my-app
 ```
 
-Base Docker Image
------------------
+## Base Docker Image
+
 This image is intended to be the base image for your application under test,
 meaning that the application runtime and Ghost Inspector scripts and utilities
-are pre-installed for you. 
+are pre-installed for you.
 
 To get started, specify `ghostinspector/test-runner-node` in the `FROM`
 section of your `Dockerfile`.
 
 ### Environment variables
+
 As well as adding any dependencies or additional requirements for your
 application, the following environment variables are required for the test
 runner:
 
- * `APP_PORT` - the port your local application will run on (eg: `3000`)
- * `GI_API_KEY` - available in your [Ghost Inspector account](https://app.ghostinspector.com/account)
- * `GI_SUITE` - the ID of the Ghost Inspector test suite you wish to run
- * `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
- * `STARTUP_DELAY` (optional) - seconds to wait for application and ngrok each to start up, defaults to 3 seconds
- * `GI_PARAM_myVar` (optional) - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
- * `GI_PASSING_STATUS_KEY` (optional) - set this to `screenshotComparePassing` if you wish to fail the build based on the screenshot status.
+- `APP_PORT` - the port your local application will run on (eg: `3000`)
+- `GI_API_KEY` - available in your [Ghost Inspector account](https://app.ghostinspector.com/account)
+- `GI_SUITE` - the ID of the Ghost Inspector test suite you wish to run
+- `NGROK_TOKEN` - available from your [ngrok account](https://ngrok.com/)
+- `STARTUP_DELAY` (optional) - seconds to wait for ngrok to start up, defaults to 3 seconds
+- `APP_WAIT_TIMEOUT` (optional) - ping `APP_PORT` for the specified number of seconds before execution, time out otherwise
+- `GI_PARAM_myVar` (optional) - additional URL parameter to send to our API, the value of which will be accessible in your test under `{{myVar}}`
+- `GI_PASSING_STATUS_KEY` (optional) - set this to `screenshotComparePassing` if you wish to fail the build based on the screenshot status.
 
 ### Entry point
+
 The last line of your `Dockerfile` should be `CMD`, which should look
 something like this:
 
@@ -78,15 +80,14 @@ CMD ["index.js", "--foo=bar"]
 [test runner script](includes/bin/runghostinspectorsuite) will perform the
 following:
 
- * start the entrypoint specified in `CMD` (eg: `index.js`) with `node`
- * start the `ngrok` daemon and open a tunnel to `localhost:PORT`
- * execute the Ghost Inspector test suite based on `GI_SUITE`
- * poll the Ghost Inspector API for `passing` status until a result is provided
- * exit with the pass (`0`) or fail (`1`) status
+- start the entrypoint specified in `CMD` (eg: `index.js`) with `node`
+- start the `ngrok` daemon and open a tunnel to `localhost:PORT`
+- execute the Ghost Inspector test suite based on `GI_SUITE`
+- poll the Ghost Inspector API for `passing` status until a result is provided
+- exit with the pass (`0`) or fail (`1`) status
 
+# LICENSE
 
-LICENSE
-=======
 ```
 The MIT License
 
@@ -111,6 +112,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-Support
-=======
+# Support
+
 Please open [issues in Github](https://github.com/ghost-inspector/docker-test-runner/issues) or send questions to [Ghost Inspector support](https://ghostinspector.com/support/)
